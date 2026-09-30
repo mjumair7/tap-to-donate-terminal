@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Tap-to-Donate · Test Station</title>
+  <link rel="stylesheet" href="giving-station.css" />
+  <script src="https://js.stripe.com/terminal/v1/"></script>
+</head>
+<body>
+  <main class="station">
+    <section class="brief">
+      <p class="eyebrow">EVENT STATION / TEST MODE</p>
+      <h1>Tap to donate.</h1>
+      <p>Choose a fixed amount, then run a simulated terminal tap. The screen clearly marks mock and Stripe test-mode results.</p>
+    </section>
+
+    <section class="terminal" aria-labelledby="terminal-title">
+      <div class="terminal-screen" role="status" aria-live="polite">
+        <small id="terminal-title">DEMO TERMINAL</small>
+        <strong data-screen-title>Select amount</strong>
+        <span data-screen-detail>No live payment is processed by default</span>
+      </div>
+      <div class="amounts" aria-label="Donation amount">
+        <button type="button" data-amount="500">$5</button>
+        <button type="button" data-amount="1000">$10</button>
+        <button type="button" data-amount="2000">$20</button>
+      </div>
+      <button class="tap" type="button" data-tap disabled>Simulate terminal tap</button>
+      <p class="mode" data-mode>Checking terminal mode…</p>
+    </section>
+  </main>
+  <script type="module" src="terminal-flow.js"></script>
+</body>
+</html>
