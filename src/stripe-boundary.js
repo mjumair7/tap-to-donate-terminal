@@ -1,5 +1,13 @@
 const ALLOWED_AMOUNTS = new Set([500, 1000, 2000]);
 
+export function validateStripeSecretKey(secretKey) {
+  if (!secretKey) return "";
+  if (!secretKey.startsWith("sk_test_")) {
+    throw new Error("Only a Stripe test-mode secret key is accepted");
+  }
+  return secretKey;
+}
+
 export function validateDonation(amount) {
   if (!Number.isInteger(amount) || !ALLOWED_AMOUNTS.has(amount)) {
     throw new Error("Choose one of the configured donation amounts");
@@ -23,7 +31,8 @@ async function stripeRequest(path, body, secretKey) {
 
 export async function createConnectionToken(secretKey) {
   if (!secretKey) return { mock: true, secret: null };
-  const token = await stripeRequest("terminal/connection_tokens", {}, secretKey);
+  const testKey = validateStripeSecretKey(secretKey);
+  const token = await stripeRequest("terminal/connection_tokens", {}, testKey);
   return { mock: false, secret: token.secret };
 }
 
@@ -39,6 +48,8 @@ export async function createPaymentIntent(amount, secretKey) {
     };
   }
 
+  const testKey = validateStripeSecretKey(secretKey);
+
   const intent = await stripeRequest(
     "payment_intents",
     {
@@ -48,7 +59,7 @@ export async function createPaymentIntent(amount, secretKey) {
       capture_method: "automatic",
       description: "Event donation",
     },
-    secretKey,
+    testKey,
   );
   return {
     mock: false,
